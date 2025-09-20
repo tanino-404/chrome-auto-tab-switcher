@@ -10,7 +10,7 @@ class TabSwitcherPopup {
     }
 
     async init() {
-        console.log('TabSwitcherPopup初期化開始');
+        // console.log('TabSwitcherPopup初期化開始');
 
         // イベントリスナーをバインド
         this.bindEvents();
@@ -49,22 +49,34 @@ class TabSwitcherPopup {
             const tabItem = document.createElement('div');
             tabItem.className = 'tab-item';
             tabItem.innerHTML = `
-                <span class="tab-number">${index + 1}</span>
-                <input type="text"
-                       class="tab-url-input"
-                       data-index="${index}"
-                       value="${tab.url || ''}"
-                       placeholder="URL または file:// パス"
-                       title="WebページのURLまたはローカルファイルのfile://パス">
-                <input type="number"
-                       class="tab-time-input"
-                       data-index="${index}"
-                       value="${tab.time || 10}"
-                       min="1"
-                       max="3600"
-                       title="秒単位で表示時間を設定">
-                <span class="time-unit">秒</span>
-                <button class="btn btn-icon btn-remove" data-index="${index}" title="このタブを削除">🗑️</button>
+                <div class="tab-main-row">
+                    <span class="tab-number">${index + 1}.</span>
+                    <input type="text"
+                           class="tab-url-input"
+                           data-index="${index}"
+                           value="${tab.url || ''}"
+                           placeholder="URL または file:// パス"
+                           title="WebページのURLまたはローカルファイルのfile://パス">
+                    <input type="number"
+                           class="tab-time-input"
+                           data-index="${index}"
+                           value="${tab.time || 10}"
+                           min="1"
+                           max="3600"
+                           title="秒単位で表示時間を設定">
+                    <span class="time-unit">秒</span>
+                </div>
+                <div class="tab-detail-row">
+                    <div class="reload-toggle-container">
+                        <label class="reload-toggle-label">リロード機能</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="reload-toggle-${index}" class="toggle-input reload-toggle-input"
+                                   data-index="${index}" ${tab.reload !== false ? 'checked' : ''}>
+                            <label for="reload-toggle-${index}" class="toggle-slider"></label>
+                        </div>
+                    </div>
+                    <button class="btn btn-icon btn-remove" data-index="${index}" title="このタブを削除">×</button>
+                </div>
             `;
             container.appendChild(tabItem);
         });
@@ -75,7 +87,7 @@ class TabSwitcherPopup {
 
     // タブを追加
     addTab() {
-        this.tabList.push({ url: '', time: 10 });
+        this.tabList.push({ url: '', time: 10, reload: true });
         this.renderTabList();
         this.addLog(`タブを追加しました (${this.tabList.length}個目)`, 'info');
     }
@@ -86,6 +98,19 @@ class TabSwitcherPopup {
             this.tabList.splice(index, 1);
             this.renderTabList();
             this.addLog(`タブを削除しました (残り${this.tabList.length}個)`, 'info');
+        }
+    }
+
+    // タブのリロード設定を切り替え
+    toggleTabReload(index, checked = null) {
+        if (index >= 0 && index < this.tabList.length) {
+            if (checked !== null) {
+                this.tabList[index].reload = checked;
+            } else {
+                this.tabList[index].reload = !this.tabList[index].reload;
+            }
+            const status = this.tabList[index].reload ? '有効' : '無効';
+            this.addLog(`タブ${index + 1}のリロード設定を${status}にしました`, 'info');
         }
     }
 
@@ -119,6 +144,14 @@ class TabSwitcherPopup {
                 if (confirm('このタブを削除しますか？')) {
                     this.removeTab(index);
                 }
+            });
+        });
+
+        // リロードトグル
+        document.querySelectorAll('.reload-toggle-input').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                this.toggleTabReload(index, e.target.checked);
             });
         });
     }
@@ -159,6 +192,7 @@ class TabSwitcherPopup {
         document.getElementById('auto-start-toggle').addEventListener('change', (e) => {
             this.saveAutoStartSetting(e.target.checked);
         });
+
     }
 
     // 設定をロード
@@ -197,6 +231,7 @@ class TabSwitcherPopup {
             autoStartToggle.checked = this.settings.autoStart;
         }
 
+
         // ログ表示
         if (this.settings.logs && this.settings.logs.length > 0) {
             this.displayLogs(this.settings.logs);
@@ -226,7 +261,10 @@ class TabSwitcherPopup {
             // 背景スクリプトに設定変更を通知
             chrome.runtime.sendMessage({
                 action: 'settingsUpdated',
-                settings: { tabList: validTabList, autoStart }
+                settings: {
+                    tabList: validTabList,
+                    autoStart: autoStart
+                }
             });
 
         } catch (error) {
@@ -244,6 +282,7 @@ class TabSwitcherPopup {
 
             // 自動起動をデフォルトに戻す
             document.getElementById('auto-start-toggle').checked = true;
+
 
             // 自動的に保存
             await this.saveSettings();
@@ -263,6 +302,7 @@ class TabSwitcherPopup {
             this.addLog(`自動起動設定エラー: ${error.message}`, 'error');
         }
     }
+
 
     // タブ切り替えを開始
     async startSwitching() {
@@ -366,7 +406,7 @@ class TabSwitcherPopup {
                 const autoStartToggle = document.getElementById('auto-start-toggle');
                 if (autoStartToggle && !response.isRunning) {
                     // 停止中の場合、UIの自動開始設定と実際の状態を同期
-                    this.addLog(`ステータス同期: 実行中=${response.isRunning}, 自動開始=${autoStartToggle.checked}`, 'info');
+                    // this.addLog(`ステータス同期: 実行中=${response.isRunning}, 自動開始=${autoStartToggle.checked}`, 'info');
                 }
             }
         } catch (error) {
@@ -390,7 +430,7 @@ class TabSwitcherPopup {
         const timestamp = new Date().toLocaleTimeString('ja-JP');
         const logEntry = `[${timestamp}] ${message}`;
 
-        console.log(logEntry);
+        // console.log(logEntry);
 
         const logContainer = document.getElementById('log-display');
         if (logContainer) {

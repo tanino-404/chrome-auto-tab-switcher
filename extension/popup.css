@@ -254,16 +254,42 @@ h1 {
 
 /* タブアイテム */
 .tab-item {
-    display: flex;
-    gap: 8px;
     padding: 12px;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
     background: var(--bg-secondary);
     transition: all 0.2s ease;
     margin: 4px;
     border-radius: 8px;
-    border-bottom: none;
+    border: 1px solid var(--border-color);
+}
+
+.tab-main-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.tab-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-top: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.reload-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reload-toggle-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
 }
 
 .tab-item:hover {
@@ -442,8 +468,24 @@ h1 {
 .btn-remove {
     background-color: var(--danger-color);
     color: white;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
+
+.btn-remove:hover {
+    background-color: #e53e3e;
+    transform: scale(1.05);
+}
+
 
 .btn-small {
     padding: 6px 12px;

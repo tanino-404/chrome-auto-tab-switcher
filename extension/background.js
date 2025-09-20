@@ -16,7 +16,7 @@ class TabSwitcherBackground {
     }
 
     async init() {
-        console.log('TabSwitcherBackground 初期化開始');
+        // console.log('TabSwitcherBackground 初期化開始');
 
         // 設定をロード
         await this.loadSettings();
@@ -58,11 +58,11 @@ class TabSwitcherBackground {
             this.isRunning = result.isRunning || false;
             this.currentTabIndex = result.currentTabIndex || 0;
 
-            console.log('設定をロード:', {
-                tabCount: this.tabList.length,
-                autoStart: this.autoStart,
-                isRunning: this.isRunning
-            });
+            // console.log('設定をロード:', {
+            //     tabCount: this.tabList.length,
+            //     autoStart: this.autoStart,
+            //     isRunning: this.isRunning
+            // });
 
         } catch (error) {
             console.error('設定ロードエラー:', error);
@@ -156,11 +156,11 @@ class TabSwitcherBackground {
 
     // 拡張機能起動時の処理
     async handleStartup() {
-        console.log('Chrome起動検知');
+        // console.log('Chrome起動検知');
 
         // 既に実行中の場合はスキップ
         if (this.isRunning) {
-            console.log('既に実行中のため起動処理をスキップ');
+            // console.log('既に実行中のため起動処理をスキップ');
             return;
         }
 
@@ -187,7 +187,7 @@ class TabSwitcherBackground {
 
     // 拡張機能インストール時の処理
     async handleInstalled() {
-        console.log('拡張機能インストール/更新検知');
+        // console.log('拡張機能インストール/更新検知');
 
         await this.loadSettings();
         this.log('拡張機能インストール時の設定確認完了', 'info');
@@ -238,7 +238,7 @@ class TabSwitcherBackground {
     async startSwitching() {
         try {
             if (this.isRunning) {
-                console.log('既に実行中です');
+                // console.log('既に実行中です');
                 return true;
             }
 
@@ -276,7 +276,7 @@ class TabSwitcherBackground {
     async stopSwitching() {
         try {
             if (!this.isRunning) {
-                console.log('既に停止しています');
+                // console.log('既に停止しています');
                 return true;
             }
 
@@ -492,6 +492,17 @@ class TabSwitcherBackground {
             // ウィンドウを最前面に移動
             await chrome.windows.update(tab.windowId, { focused: true });
 
+            // タブごとのリロード設定が有効な場合、ページをリロード
+            if (currentTabConfig.reload !== false) {
+                try {
+                    await chrome.tabs.reload(tab.id);
+                    this.log(`ページをリロードしました: ${this.getDisplayUrl(currentTabConfig.url)}`, 'info');
+                } catch (reloadError) {
+                    console.error('ページリロードエラー:', reloadError);
+                    this.log(`ページリロードエラー: ${reloadError.message}`, 'error');
+                }
+            }
+
             this.currentTab = this.getDisplayUrl(currentTabConfig.url);
             this.remainingTime = currentTabConfig.time;
 
@@ -558,6 +569,7 @@ class TabSwitcherBackground {
                 this.autoStart = newSettings.autoStart;
             }
 
+
             this.log('設定が更新されました', 'info');
 
             // 実行中の場合は再起動
@@ -587,7 +599,7 @@ class TabSwitcherBackground {
         const timestamp = new Date().toLocaleTimeString('ja-JP');
         const logEntry = `[${timestamp}] ${message}`;
 
-        console.log(logEntry);
+        // console.log(logEntry);
 
         try {
             const result = await chrome.storage.local.get(['logs']);
@@ -624,7 +636,7 @@ class TabSwitcherBackground {
 
             await chrome.action.setTitle({ title: title });
 
-            console.log(`アイコン更新: ${status}`);
+            // console.log(`アイコン更新: ${status}`);
 
             // アイコンを切り替えてステータスを視覚的に表示
             let iconPath;
