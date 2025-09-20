@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Tab Switcher</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <!-- ①タイトル(左) ステータス(右) -->
+        <header class="section">
+            <h1>Auto Tab Switcher</h1>
+            <div class="status-indicator">
+                <span id="status-dot" class="status-dot stopped"></span>
+                <span id="status-text">停止中</span>
+            </div>
+        </header>
+
+        <!-- ②開始ボタン(左) 停止ボタン(右) -->
+        <section class="section control-buttons">
+            <button id="start-btn" class="btn btn-primary">開始</button>
+            <button id="stop-btn" class="btn btn-secondary" disabled>停止</button>
+        </section>
+
+        <!-- ③自動開始ボタン -->
+        <section class="section auto-start-section">
+            <div class="toggle-container">
+                <label class="toggle-label">Chrome起動時に自動開始</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="auto-start-toggle" class="toggle-input">
+                    <label for="auto-start-toggle" class="toggle-slider"></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- ④現在のタブ(左) 残り時間(右) -->
+        <section class="section current-status">
+            <div class="current-info">
+                <div class="current-tab">
+                    <label>現在のタブ:</label>
+                    <span id="current-tab-display">-</span>
+                </div>
+                <div class="remaining-time">
+                    <label>残り時間:</label>
+                    <span id="remaining-time-display">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑤タブ設定(リスト形式) -->
+        <section class="section tab-list">
+            <div class="tab-list-header">
+                <h2>タブ設定</h2>
+                <button id="add-tab-btn" class="btn btn-icon btn-add" title="タブを追加">+</button>
+            </div>
+            <div id="tab-list-container" class="tab-list-container">
+                <!-- JavaScript で動的生成 -->
+            </div>
+        </section>
+
+        <!-- ⑥設定の保存(左) リセット(右) -->
+        <section class="section action-buttons">
+            <button id="save-btn" class="btn btn-success">設定を保存</button>
+            <button id="reset-btn" class="btn btn-warning">リセット</button>
+        </section>
+
+        <!-- ⑦ログ -->
+        <section class="section logs">
+            <h3>ログ</h3>
+            <div id="log-display" class="log-container">
+                <div class="log-entry">拡張機能が読み込まれました</div>
+            </div>
+            <!-- ⑧ログクリアボタン -->
+            <button id="clear-logs-btn" class="btn btn-small">ログをクリア</button>
+        </section>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

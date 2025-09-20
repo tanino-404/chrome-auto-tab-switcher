@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テストページ2 - ニュース画面</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #2196F3 0%, #21CBF3 100%);
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            height: calc(100vh - 120px);
+        }
+        .news-item {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .news-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+        }
+        .news-content {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .timestamp {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 1.3em;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="timestamp" id="timestamp"></div>
+    <div class="header">📰 ニュース & インフォメーション</div>
+    <div class="content">
+        <div class="news-item">
+            <div class="news-title">🎯 重要なお知らせ</div>
+            <div class="news-content">
+                本日のデジタルサイネージシステムは正常に稼働しています。
+                自動タブ切り替え機能により、複数の情報画面が順次表示されます。
+            </div>
+        </div>
+        <div class="news-item">
+            <div class="news-title">⚡ システム情報</div>
+            <div class="news-content">
+                Chrome自動タブ切り替え拡張機能 v1.0.0<br>
+                稼働時間: <span id="uptime">計算中...</span><br>
+                次回更新: 自動
+            </div>
+        </div>
+        <div class="news-item">
+            <div class="news-title">🌟 機能紹介</div>
+            <div class="news-content">
+                • 最大10タブの自動切り替え<br>
+                • 個別タイマー設定<br>
+                • ローカルファイル対応<br>
+                • エラー自動復旧機能
+            </div>
+        </div>
+        <div class="news-item">
+            <div class="news-title">📊 運用状況</div>
+            <div class="news-content">
+                システム状態: <span style="color: #4caf50;">正常稼働中</span><br>
+                エラー数: 0件<br>
+                最終更新: <span id="last-update"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startTime = Date.now();
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toLocaleString('ja-JP');
+            document.getElementById('last-update').textContent = now.toLocaleTimeString('ja-JP');
+
+            const uptimeMs = Date.now() - startTime;
+            const uptimeMin = Math.floor(uptimeMs / 60000);
+            const uptimeSec = Math.floor((uptimeMs % 60000) / 1000);
+            document.getElementById('uptime').textContent = `${uptimeMin}分${uptimeSec}秒`;
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
