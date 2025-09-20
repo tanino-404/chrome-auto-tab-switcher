@@ -2,6 +2,8 @@
 
 デジタルサイネージ用途として、Chrome上の複数タブを自動的に切り替える拡張機能です。
 
+<img src="https://raw.githubusercontent.com/tanino-404/chrome-auto-tab-switcher/refs/heads/image/Chrome_AutoTabSwitcher.png" alt="Screenshot" title="Auto Tab Switcher -Screenshot-">
+
 ## 機能
 
 - **動的タブ管理**: 必要な分だけタブを追加/削除（リスト形式）
