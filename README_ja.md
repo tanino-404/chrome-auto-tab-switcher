@@ -153,18 +153,9 @@ extension/
 ├── popup.js          # ポップアップのロジック
 ├── popup.css         # スタイルシート（M+ 1pフォント適用）
 └── icons/            # アイコンファイル
-    ├── icon-16.png         # ベースアイコン
-    ├── icon-32.png
-    ├── icon-48.png
-    ├── icon-128.png
-    ├── icon-running-16.png  # 実行中アイコン（緑）
-    ├── icon-running-32.png
-    ├── icon-running-48.png
-    ├── icon-running-128.png
-    ├── icon-stopped-16.png  # 停止中アイコン（赤）
-    ├── icon-stopped-32.png
-    ├── icon-stopped-48.png
-    └── icon-stopped-128.png
+    ├── icon-xx.png         # ベースアイコン
+    ├── icon-running-xx.png  # 実行中アイコン（緑）
+    ├── icon-stopped-xx.png  # 停止中アイコン（赤）
 ```
 
 ## 制限事項
